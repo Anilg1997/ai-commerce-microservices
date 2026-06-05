@@ -68,10 +68,7 @@ Angular app: `http://localhost:4200`
 
 ## GitHub Setup
 
-Create an empty GitHub repository named `ai-commerce-microservices`, then run:
-
 ```powershell
-git init
 git add .
 git commit -m "Initial AI ecommerce microservices project"
 git branch -M main
