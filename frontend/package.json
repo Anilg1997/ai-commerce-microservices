@@ -23,6 +23,7 @@
     "@angular-devkit/build-angular": "^18.2.0",
     "@angular/cli": "^18.2.0",
     "@angular/compiler-cli": "^18.2.0",
+    "puppeteer": "^25.1.0",
     "typescript": "^5.5.4"
   }
 }
