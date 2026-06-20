@@ -4,11 +4,12 @@ import com.anilg.ecommerce.common.ApiResponse;
 import java.util.List;
 import java.util.Map;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -23,6 +24,7 @@ public class AiController {
                         You are an ecommerce AI agent for AI Commerce.
                         Help customers find products, compare options, understand orders,
                         and answer support questions. Be concise and practical.
+                        Use the retrieved knowledge context to give accurate answers.
                         """)
                 .build();
         this.knowledgeBase = knowledgeBase;
@@ -31,14 +33,11 @@ public class AiController {
 
     @PostMapping("/chat")
     public ApiResponse<AiAnswer> chat(@RequestBody AiQuestion question) {
-        String context = String.join("\n", knowledgeBase.search(question.message()));
+        String context = String.join("\n\n", knowledgeBase.search(question.message()));
         String answer = chatClient.prompt()
                 .user("""
-                        Customer question:
-                        %s
-
-                        Use this ecommerce knowledge when useful:
-                        %s
+                        Customer question: %s
+                        Retrieved knowledge context: %s
                         """.formatted(question.message(), context))
                 .call()
                 .content();
@@ -47,14 +46,15 @@ public class AiController {
 
     @PostMapping("/agent/plan")
     public ApiResponse<AgentPlan> plan(@RequestBody AiQuestion question) {
-        List<String> steps = List.of(
-                "Understand customer intent: " + question.message(),
-                "Search catalog-service for matching products",
-                "Compare price, stock, and delivery constraints",
-                "Recommend products and offer checkout action",
-                "Create order through order-service after customer confirmation"
-        );
-        return ApiResponse.ok(new AgentPlan("ecommerce-shopping-agent", steps));
+        String plan = chatClient.prompt()
+                .user("""
+                        Create a step-by-step agent plan to handle this customer request: %s
+                        Return a numbered list of concrete steps the AI agent should take.
+                        """.formatted(question.message()))
+                .call()
+                .content();
+        return ApiResponse.ok(new AgentPlan("ecommerce-shopping-agent",
+                List.of(plan.split("\n")).stream().filter(l -> l.matches(".*\\d+\\..*")).toList()));
     }
 
     @PostMapping("/agent/analyze")
@@ -63,14 +63,15 @@ public class AiController {
                 .uri("/api/analytics/dashboard")
                 .retrieve()
                 .body(Object.class);
+        String context = String.join("\n", knowledgeBase.search("analytics events dashboard"));
         String answer = chatClient.prompt()
                 .user("""
                         Analyze this real-time ecommerce platform dashboard.
                         User request: %s
-                        Dashboard/API data: %s
-
+                        Dashboard data: %s
+                        Knowledge context: %s
                         Explain funnel health, risky stages, and the next best action.
-                        """.formatted(question.message(), dashboard))
+                        """.formatted(question.message(), dashboard, context))
                 .call()
                 .content();
         return ApiResponse.ok(new AiAnswer(answer, String.valueOf(dashboard)));
@@ -79,15 +80,39 @@ public class AiController {
     @PostMapping("/rag/search")
     public ApiResponse<Map<String, Object>> search(@RequestBody AiQuestion question) {
         List<String> docs = knowledgeBase.search(question.message());
-        return ApiResponse.ok(Map.of("query", question.message(), "documents", docs));
+        return ApiResponse.ok(Map.of("query", question.message(), "documents", docs, "count", docs.size()));
     }
 
-    public record AiQuestion(String message) {
+    @PostMapping("/mcp/execute")
+    public ApiResponse<MCPToolResult> executeMcp(@RequestBody MCPRequest request) {
+        return switch (request.tool()) {
+            case "dashboard_analysis" -> {
+                Object dashboard = restClient.get().uri("/api/analytics/dashboard").retrieve().body(Object.class);
+                yield ApiResponse.ok(new MCPToolResult("dashboard_analysis",
+                        "Dashboard data retrieved: " + dashboard, "success"));
+            }
+            case "product_search" -> {
+                Object products = restClient.get().uri("/api/catalog/products").retrieve().body(Object.class);
+                yield ApiResponse.ok(new MCPToolResult("product_search",
+                        "Products retrieved: " + products, "success"));
+            }
+            case "system_knowledge" -> {
+                String context = String.join("\n", knowledgeBase.search(request.params().toString()));
+                yield ApiResponse.ok(new MCPToolResult("system_knowledge", context, "success"));
+            }
+            default -> ApiResponse.ok(new MCPToolResult("unknown", "Tool not found: " + request.tool(), "error"));
+        };
     }
 
-    public record AiAnswer(String answer, String retrievedContext) {
+    @GetMapping("/health")
+    public ApiResponse<String> health() {
+        return ApiResponse.ok("ai-service ready | Ollama: " +
+                System.getenv().getOrDefault("OLLAMA_BASE_URL", "http://localhost:11434"));
     }
 
-    public record AgentPlan(String agent, List<String> steps) {
-    }
+    public record AiQuestion(String message) {}
+    public record AiAnswer(String answer, String retrievedContext) {}
+    public record AgentPlan(String agent, List<String> steps) {}
+    public record MCPRequest(String tool, Map<String, Object> params) {}
+    public record MCPToolResult(String tool, String result, String status) {}
 }

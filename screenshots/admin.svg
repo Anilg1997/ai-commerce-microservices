@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" font-family="Inter, sans-serif">
+  <defs><linearGradient id="header" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2874f0"/><stop offset="100%" stop-color="#1a5fc7"/></linearGradient></defs>
+  <rect width="1200" height="800" fill="#f1f3f6"/>
+  <rect width="1200" height="52" fill="url(#header)"/>
+  <rect x="0" y="52" width="1200" height="36" fill="#1a5fc7"/>
+  <rect x="24" y="14" width="80" height="24" rx="4" fill="white" opacity="0.9"/>
+  <!-- Admin Sidebar -->
+  <rect x="24" y="104" width="200" height="400" rx="12" fill="white"/>
+  <text x="40" y="136" font-size="18" font-weight="700" fill="#212121">Admin Panel</text>
+  <rect x="36" y="152" width="176" height="36" rx="8" fill="#e3f2fd"/>
+  <text x="48" y="175" font-size="14" font-weight="600" fill="#2874f0">Dashboard</text>
+  <rect x="36" y="192" width="176" height="36" rx="8" fill="transparent"/>
+  <text x="48" y="215" font-size="14" fill="#555">Products</text>
+  <rect x="36" y="232" width="176" height="36" rx="8" fill="transparent"/>
+  <text x="48" y="255" font-size="14" fill="#555">Orders</text>
+  <rect x="36" y="272" width="176" height="36" rx="8" fill="transparent"/>
+  <text x="48" y="295" font-size="14" fill="#555">Users</text>
+  <!-- Metrics -->
+  <text x="248" y="136" font-size="24" font-weight="700" fill="#212121">Admin Dashboard</text>
+  <rect x="248" y="152" width="130" height="70" rx="10" fill="white" style="border-left:4px solid #1565c0"/>
+  <text x="313" y="182" font-size="24" font-weight="700" fill="#212121" text-anchor="middle">42</text>
+  <text x="313" y="202" font-size="12" fill="#666" text-anchor="middle">Registered Users</text>
+  <rect x="390" y="152" width="130" height="70" rx="10" fill="white" style="border-left:4px solid #f9a825"/>
+  <text x="455" y="182" font-size="24" font-weight="700" fill="#212121" text-anchor="middle">156</text>
+  <text x="455" y="202" font-size="12" fill="#666" text-anchor="middle">Cart Adds</text>
+  <rect x="532" y="152" width="130" height="70" rx="10" fill="white" style="border-left:4px solid #e65100"/>
+  <text x="597" y="182" font-size="24" font-weight="700" fill="#212121" text-anchor="middle">89</text>
+  <text x="597" y="202" font-size="12" fill="#666" text-anchor="middle">Orders</text>
+  <rect x="674" y="152" width="130" height="70" rx="10" fill="white" style="border-left:4px solid #2e7d32"/>
+  <text x="739" y="182" font-size="24" font-weight="700" fill="#212121" text-anchor="middle">67</text>
+  <text x="739" y="202" font-size="12" fill="#666" text-anchor="middle">Payments</text>
+  <rect x="816" y="152" width="130" height="70" rx="10" fill="white" style="border-left:4px solid #7b1fa2"/>
+  <text x="881" y="182" font-size="24" font-weight="700" fill="#212121" text-anchor="middle">52</text>
+  <text x="881" y="202" font-size="12" fill="#666" text-anchor="middle">Shipped</text>
+  <rect x="958" y="152" width="130" height="70" rx="10" fill="white" style="border-left:4px solid #00838f"/>
+  <text x="1023" y="182" font-size="24" font-weight="700" fill="#212121" text-anchor="middle">38</text>
+  <text x="1023" y="202" font-size="12" fill="#666" text-anchor="middle">Delivered</text>
+  <!-- Funnel Chart -->
+  <rect x="248" y="236" width="420" height="200" rx="12" fill="white"/>
+  <text x="264" y="266" font-size="16" font-weight="700" fill="#212121">Funnel Overview</text>
+  <rect x="264" y="280" width="388" height="26" rx="6" fill="#2874f0"/>
+  <text x="284" y="298" font-size="12" font-weight="600" fill="white">Users: 42</text>
+  <rect x="264" y="312" width="340" height="26" rx="6" fill="#2874f0" opacity="0.85"/>
+  <text x="284" y="330" font-size="12" font-weight="600" fill="white">Cart: 156</text>
+  <rect x="264" y="344" width="260" height="26" rx="6" fill="#2874f0" opacity="0.7"/>
+  <text x="284" y="362" font-size="12" font-weight="600" fill="white">Orders: 89</text>
+  <rect x="264" y="376" width="180" height="26" rx="6" fill="#2874f0" opacity="0.55"/>
+  <text x="284" y="394" font-size="12" font-weight="600" fill="white">Payments: 67</text>
+  <!-- Conversion -->
+  <rect x="680" y="236" width="300" height="200" rx="12" fill="white"/>
+  <text x="696" y="266" font-size="16" font-weight="700" fill="#212121">Conversion Rates</text>
+  <rect x="696" y="280" width="268" height="32" rx="8" fill="#f5f7fa"/>
+  <text x="710" y="300" font-size="13" fill="#555">User → Cart</text><text x="950" y="300" font-size="18" font-weight="700" fill="#2874f0" text-anchor="end">100%</text>
+  <rect x="696" y="318" width="268" height="32" rx="8" fill="#f5f7fa"/>
+  <text x="710" y="338" font-size="13" fill="#555">Cart → Order</text><text x="950" y="338" font-size="18" font-weight="700" fill="#2874f0" text-anchor="end">57%</text>
+  <rect x="696" y="356" width="268" height="32" rx="8" fill="#f5f7fa"/>
+  <text x="710" y="376" font-size="13" fill="#555">Order → Payment</text><text x="950" y="376" font-size="18" font-weight="700" fill="#2874f0" text-anchor="end">75%</text>
+  <rect x="696" y="394" width="268" height="32" rx="8" fill="#f5f7fa"/>
+  <text x="710" y="414" font-size="13" fill="#555">Payment → Delivered</text><text x="950" y="414" font-size="18" font-weight="700" fill="#2874f0" text-anchor="end">57%</text>
+</svg>

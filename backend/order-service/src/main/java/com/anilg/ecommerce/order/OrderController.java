@@ -30,6 +30,7 @@ public class OrderController {
                 .map(item -> item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         order.setTotal(total);
+        order.setStatus("CREATED");
         PurchaseOrder saved = orders.save(order);
         kafka.send("commerce.events", String.valueOf(saved.getId()), DomainEvent.of(
                 "ORDER_CREATED",
@@ -48,5 +49,10 @@ public class OrderController {
     @GetMapping("/{id}")
     public ApiResponse<PurchaseOrder> byId(@PathVariable Long id) {
         return ApiResponse.ok(orders.findById(id).orElseThrow());
+    }
+
+    @GetMapping("/admin/all")
+    public ApiResponse<List<PurchaseOrder>> allOrders() {
+        return ApiResponse.ok(orders.findAllByOrderByCreatedAtDesc());
     }
 }
